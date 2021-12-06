@@ -1,0 +1,75 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load humanize %}
+{% load crispy_forms_tags %}
+
+
+{% block content %}
+
+<div class="container-fluid">
+
+<div class="row" style="overflow-x: auto; height: 90%;">
+
+    <div class="col-md-3">
+    <form action="." method="POST" enctype="multipart/form-data" id="foo">
+    {% csrf_token %}
+    <center>
+    {{ p_form|crispy }}
+    <br>
+    <button class="btn btn-info" type="submit" onsubmit="re()">upload</button>
+                </center>
+        <script>
+            function re(){
+                var fo = document.getElementById('foo')
+                fo.reset()
+            }
+        </script>
+</form>
+
+    </div>
+
+    <div class="col-md-6" style="">
+                        <center>
+         <h4>top 10 rated male and female</h4>
+    </center>
+        <div class="row">
+            <div class="col">
+        <h2>Male</h2>
+        {% for p in post %}
+         {% if p.gender == 'male' %}
+        {% if p.total_likes > 0 %}
+        <a href="{% url 'post-detail' pk=p.pk %}" style="text-decoration: none;">
+        <img src="{{ p.image.url }}" width="150" height="200" >
+        </a>
+        <br>
+        <h4>{{ p.name }}</h4>
+        <h4>like{{ total_likes|pluralize }} {{ p.total_likes }}</h4>
+        {% else %}
+        {% endif %}
+        {% endif %}
+        {% endfor %}
+
+    </div>
+
+    <div class="col">
+        <h2>Female</h2>
+        {% for po in pos %}
+        {% if po.gender == 'female' %}
+        {% if po.total_likes > 0 %}
+        <a href="{% url 'post-detail' pk=po.pk %}" style="text-decoration: none;">
+        <img src="{{ po.image.url }}" width="150" height="200" >
+        </a>
+        <br>
+        <h4>{{ po.name }}</h4>
+        <h4>like{{ total_likes|pluralize }} {{ po.total_likes }}</h4>
+        {% else %}
+        {% endif %}
+        {% endif %}
+        {% endfor %}
+    </div>
+</div>
+         </div>
+        </div>
+</div>
+
+{% endblock %}
